@@ -2,6 +2,13 @@
 
 This program allows you to change the IP address of your network interface easily.
 
+## Features:
+
+- Easy-to-use interface for changing IP addresses.
+- IP address validation to ensure correct formatting.
+- Graceful error handling with informative error messages.
+- Logging of all program activities to a file named 'ip_changer.log' for troubleshooting purposes.
+
 ## Usage:
 
 1. Ensure that you run the program with administrative/root privileges, depending on your operating system.
@@ -21,19 +28,3 @@ This program allows you to change the IP address of your network interface easil
 ## Dependencies:
 
 - Python 3.x
-- `IPaddress` module (standard library)
-- `subprocess` module (standard library)
-- `socket` module (standard library)
-- `platform` module (standard library)
-
-## Input Validation:
-
-- The program validates user input for IP addresses to ensure they are in the correct format.
-
-## Error Handling:
-
-- The program handles errors gracefully and provides informative error messages in case of failures.
-
-## Logging:
-
-- All program activities are logged to a file named 'ip_changer.log' for troubleshooting purposes.
