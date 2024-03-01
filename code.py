@@ -9,10 +9,10 @@ logging.basicConfig(filename='ip_changer.log', level=logging.INFO, format='%(asc
 
 def get_current_ip():
     try:
-        # Create a socket object to get local machine's IP address
+        ##Create a socket object to get local machine's IP address
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))  # Connect to Google's DNS server
-        current_ip = s.getsockname()[0]  # Get the local IP address
+        s.connect(("8.8.8.8", 80))  ##Connect to Google's DNS server
+        current_ip = s.getsockname()[0]  ##Get local IP address
         s.close()
         return current_ip
     except Exception as e:
@@ -21,17 +21,16 @@ def get_current_ip():
 
 def generate_new_ip(current_ip, start_ip, end_ip):
     try:
-        # Convert the current IP address to an IPv4Address object
+        ##Convert current IP address to an IPv4Address object
         current_ip_address = ipaddress.IPv4Address(current_ip)
-        # Convert the start and end IP addresses to IPv4Address objects
         start_ip_address = ipaddress.IPv4Address(start_ip)
         end_ip_address = ipaddress.IPv4Address(end_ip)
 
-        # Check if the current IP address is within the specified range
+        ##Check if the current IP address is within specified range
         if start_ip_address <= current_ip_address <= end_ip_address:
-            # Generate a new IP address by incrementing the current IP address
+            ##Generate a new IP address by incrementing the current IP address
             new_ip_address = current_ip_address + 1
-            # Ensure the new IP address is within the specified range
+            ##Ensure the new IP address is within specified range
             if new_ip_address <= end_ip_address:
                 return str(new_ip_address)
             else:
@@ -47,10 +46,10 @@ def generate_new_ip(current_ip, start_ip, end_ip):
 def change_ip_address(interface, new_ip):
     try:
         if platform.system() == 'Windows':
-            # Command to change IP address using netsh (Windows)
+            ##Change IP address using netsh (Windows)
             subprocess.run(['netsh', 'interface', 'ipv4', 'set', 'address', f'name="{interface}"', 'static', new_ip, '255.255.255.0'], check=True)
-        elif platform.system() in ['Linux', 'Darwin']:  # Linux or macOS
-            # Command to change IP address using ifconfig (Linux/macOS)
+        elif platform.system() in ['Linux', 'Darwin']:
+            ##Change IP address using ifconfig (Linux/mac)
             subprocess.run(['sudo', 'ifconfig', interface, new_ip, 'netmask', '255.255.255.0', 'up'], check=True)
         else:
             logging.error("Unsupported operating system.")
@@ -84,10 +83,10 @@ def get_ip_range():
 def set_dhcp(interface):
     try:
         if platform.system() == 'Windows':
-            # Command to set IP address to DHCP using netsh (Windows)
+            ##Set IP address to DHCP using netsh (Windows)
             subprocess.run(['netsh', 'interface', 'ipv4', 'set', 'address', f'name="{interface}"', 'dhcp'], check=True)
-        elif platform.system() in ['Linux', 'Darwin']:  # Linux or macOS
-            # Command to set IP address to DHCP using dhclient (Linux/macOS)
+        elif platform.system() in ['Linux', 'Darwin']:
+            ##Set IP address to DHCP using dhclient (Linux/mac)
             subprocess.run(['sudo', 'dhclient', '-r', interface], check=True)
         else:
             logging.error("Unsupported operating system.")
@@ -103,16 +102,16 @@ def set_dhcp(interface):
 def is_admin():
     if platform.system() == 'Windows':
         try:
-            # Attempt to open a system-protected directory for writing
+            ##Attempt to open a system-protected directory for writing
             with open(os.path.join(os.environ.get("SystemRoot", "C:\\Windows"), 'temp.txt'), 'w') as temp_file:
                 pass
-            # If successful, delete the temporary file and return True
+            ##If successful, delete the temp file and return True
             os.remove(temp_file.name)
             return True
         except:
             return False
-    elif platform.system() in ['Linux', 'Darwin']:  # Linux or macOS
-        return os.geteuid() == 0  # Check if the user is root (has superuser privileges)
+    elif platform.system() in ['Linux', 'Darwin']:
+        return os.geteuid() == 0
     else:
         return False
 
